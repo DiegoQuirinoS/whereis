@@ -1,0 +1,50 @@
+version: '3.6'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    hostname: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2    
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+        - "9092:9092"
+    hostname: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 192.168.1.8:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.8:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      
+  whereis:
+    image: springio/whereis
+    container_name: whereis
+    ports:
+        - "9080:9080"
+    depends_on:          
+      - kafka    
+    links:
+      - kafka:kafka
+  
+  web-whereis:
+    image: web/whereis
+    container_name: web-whereis
+    build:
+      context: ./web-whereis
+    ports:
+        - "80:80"
+    depends_on:          
+      - whereis       
+            
+#docker-compose -f "docker-compose.yml" up -d --build
