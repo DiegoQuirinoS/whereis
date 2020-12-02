@@ -10,12 +10,12 @@ it is displayed on page.
 #How to run ?
 
 You should have installed:
-    - Docker 
-    - Docker-compose
-    - Java 8 (Optional, only if you want work on code)
-    - Node (Optional, only if you want work on code)
-    - NPM (Optional, only if you want work on code)
-    - Angular (Optional, only if you want work on code)
+  - Docker 
+  - Docker-compose
+  - Java 8 (Optional, only if you want work on code)
+  - Node (Optional, only if you want work on code)
+  - NPM (Optional, only if you want work on code)
+  - Angular (Optional, only if you want work on code)
 
 To run docker-compose: 
 $ docker-compose -f "docker-compose.yml" up -d --build
