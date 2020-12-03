@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -22,6 +22,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { Message } from '@stomp/stompjs';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
+import { MapBrowserEvent } from 'ol';
 
 declare var $: any;
 
@@ -39,6 +40,8 @@ export class MapComponent implements OnInit {
   private destroy$ = new Subject();
 
   private custom:any;
+
+  activatePin:boolean = false;
 
   constructor(private http: HttpClient, private rxStompService: RxStompService) { }
 
@@ -103,15 +106,9 @@ export class MapComponent implements OnInit {
         this.map.getLayers().push(this.custom);
       })
     } 
-
-
-    /*
-    this.map.on('click', function(e:any) {      
-      console.log('clicou -> '+ e)
-    });
-    */
-
-   this.map = new Map({
+   
+    
+    this.map = new Map({
       target: 'map',
       layers: [
         tile, vector
@@ -121,8 +118,21 @@ export class MapComponent implements OnInit {
         zoom: 18
       })
     });
+    
+    this.map.on('click', (e:MapBrowserEvent) => {  
+      debugger
+      if(this.activatePin){
+        var feature = new Feature({
+          geometry: new Point(e.coordinate),
+            name:  'Pin by user'
+        });
+        
+        this.custom.getSource().addFeature(feature) 
+      }
+    });
 
     // Popup showing the position the user clicked
+    /*
     var popup = new Overlay({
       element: document.getElementById('popup')!
     });

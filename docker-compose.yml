@@ -30,6 +30,8 @@ services:
   whereis:
     image: springio/whereis
     container_name: whereis
+    build:
+      context: ./back-whereis
     ports:
         - "9080:9080"
     depends_on:          
@@ -45,6 +47,4 @@ services:
     ports:
         - "80:80"
     depends_on:          
-      - whereis       
-            
-#docker-compose -f "docker-compose.yml" up -d --build
+      - whereis      
