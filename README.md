@@ -17,5 +17,7 @@ You should have installed:
   - NPM (Optional, only if you want work on code)
   - Angular (Optional, only if you want work on code)
 
+Replace by your ip address on KAFKA_ZOOKEEPER_CONNECT and KAFKA_ADVERTISED_LISTENERS env attributes at docker-compose.yml 
+
 To run docker-compose: 
 $ docker-compose -f "docker-compose.yml" up -d --build
