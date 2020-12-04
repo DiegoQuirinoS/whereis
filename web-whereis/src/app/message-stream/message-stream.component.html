@@ -1,1 +1,6 @@
-<p *ngFor="let msg of messages">{{ msg.info }} {{msg.coords}}</p>
+<pre>
+    {{ messages | json }}
+</pre>
+<!--
+    <p *ngFor="let msg of messages">{{ msg.info }} {{msg.coords}}</p>
+-->

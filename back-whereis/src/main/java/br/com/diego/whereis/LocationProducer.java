@@ -2,13 +2,19 @@ package br.com.diego.whereis;
 
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.util.concurrent.FailureCallback;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.SuccessCallback;
 
 @Component
 public class LocationProducer {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(LocationProducer.class);
 
 	@Value("${location.topic}")
     private String locationTopic;
@@ -19,8 +25,10 @@ public class LocationProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
  
-    public void send(final @RequestBody String location) {
+    public void send(final String location) {
         final String mensageKey = UUID.randomUUID().toString();
-        kafkaTemplate.send(locationTopic, mensageKey, location);
+        ListenableFuture listenableFuture = kafkaTemplate.send(locationTopic, mensageKey, location);
+        listenableFuture.addCallback(result -> LOG.info("CALLBACK :" + result.toString()), (ex) ->  ex.printStackTrace());
     }
+    
 }

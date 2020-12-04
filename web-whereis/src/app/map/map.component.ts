@@ -23,6 +23,7 @@ import { Message } from '@stomp/stompjs';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { MapBrowserEvent } from 'ol';
+import { GeoService } from '../service/geo.service';
 
 declare var $: any;
 
@@ -43,7 +44,7 @@ export class MapComponent implements OnInit {
 
   activatePin:boolean = false;
 
-  constructor(private http: HttpClient, private rxStompService: RxStompService) { }
+  constructor(private geoService: GeoService, private rxStompService: RxStompService) { }
 
   ngOnDestroy(): void{
     this.destroy$.next(null);
@@ -51,6 +52,9 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit(): void {   
+    
+    this.geoService
+      .get().subscribe(i => console.log(i), e => console.log(e));
 
     var vectorSource = new VectorSource({
       format: new GeoJSON(),
@@ -84,7 +88,7 @@ export class MapComponent implements OnInit {
         
         var feature = new Feature({
           geometry: new Point(transform([p.coords.longitude, p.coords.latitude], 'EPSG:4326', 'EPSG:3857')),
-          name: 'My place'
+          name: 'devices'
         });
 
         this.custom = new VectorLayer({
@@ -115,12 +119,12 @@ export class MapComponent implements OnInit {
       ],
       view: new View({
         center: [0,0],
-        zoom: 18
+        zoom: 15
       })
     });
     
     this.map.on('click', (e:MapBrowserEvent) => {  
-      debugger
+     
       if(this.activatePin){
         var feature = new Feature({
           geometry: new Point(e.coordinate),

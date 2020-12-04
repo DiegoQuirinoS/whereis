@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
-import { EquipamentListComponent } from './equipament-list/equipament-list.component';
+
 import { MessageStreamComponent } from './message-stream/message-stream.component';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { myRxStompConfig } from './rx-stomp.config';
@@ -14,7 +14,6 @@ import { myRxStompConfig } from './rx-stomp.config';
   declarations: [
     AppComponent,
     MapComponent,
-    EquipamentListComponent,
     MessageStreamComponent   
   ],
   imports: [
